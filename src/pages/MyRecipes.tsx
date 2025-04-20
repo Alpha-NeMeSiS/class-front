@@ -1,6 +1,7 @@
 // ===== src/pages/MyRecipes.tsx =====
 import React, { useEffect, useState } from 'react';
 import api from '../api/api';
+import { Recipe } from '../models/Recipe';  // ← import du type
 
 const MyRecipes: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);

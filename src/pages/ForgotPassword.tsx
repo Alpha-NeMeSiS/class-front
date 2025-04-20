@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import api from '../api/api';
 
+
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>('');
 

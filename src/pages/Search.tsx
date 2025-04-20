@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../api/api';
+import { Recipe } from '../models/Recipe';  // ← import du type
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);

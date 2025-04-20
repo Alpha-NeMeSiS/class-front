@@ -1,6 +1,7 @@
 // ===== src/pages/Favorites.tsx =====
 import React, { useEffect, useState } from 'react';
 import api from '../api/api';
+import { Recipe } from '../models/Recipe';  // ← import du type
 
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<Recipe[]>([]);
