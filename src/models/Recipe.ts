@@ -4,6 +4,14 @@ export interface Recipe {
     title: string;
     description: string;
     ingredients: string[];
-    // … ajoutez ici les autres propriétés de votre modèle
+    etape: string[];
+    Comments: string[];
+    PreparationTime: number;
+    CookingTime: number;
+    Difficulty: string;
+    Budget: string;
+    DietType: string;
+    CreatedBy: string;
+
   }
   

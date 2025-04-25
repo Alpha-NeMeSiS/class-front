@@ -1,1 +1,132 @@
-.Home {}
+/* src/pages/Home/Home.module.scss */
+.Home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.hero {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  gap: 2rem;
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  color: white;
+  padding: 4rem;
+  border-radius: 1rem;
+  margin-bottom: 4rem;
+}
+
+.heroContent {
+  max-width: 500px;
+}
+
+.ctaButton {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  color: #ff7e5f;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.heroImage {
+  width: 100%;
+  height: 300px;
+  background: url('/assets/hero-image.png') center/cover no-repeat;
+  border-radius: 1rem;
+}
+
+.searchSection {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.searchWrapper {
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.suggestions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.suggestionItem {
+  background: #ff7e5f;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.popular {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.popularList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.popularItem {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.stars {
+  margin-top: 0.5rem;
+}
+
+.filled {
+  color: #ffcc00;
+}
+
+.categories {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.categoryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.categoryItem img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 0.5rem;
+}

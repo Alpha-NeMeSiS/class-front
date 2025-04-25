@@ -1,4 +1,4 @@
-import { Link, Route, Router, Routes } from 'react-router-dom'
+import { Link, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home/Home'
 import Search from './pages/Search.tsx'
@@ -18,15 +18,17 @@ import SubmitRecipe from './pages/SubmitRecipe.tsx'
 function App() {
   return (
     <>
-      <nav>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/search">Recherche</Link></li>
-          <li><Link to="/favorites">Favoris</Link></li>
-          <li><Link to="/profile">Profil</Link></li>
-          {/* etc. */}
-        </ul>
-      </nav>
+      <nav className="main-nav">
+      <div className="logo">
+        KookBook
+      </div>
+      <ul className="nav-list">
+        <li><Link to="/">Accueil</Link></li>
+        <li><Link to="/my-submit">Mes Recettes</Link></li>
+        <li><Link to="/submit">Ajoute une Recettes</Link></li>
+        <li><Link to="/favorites">Favoris</Link></li>
+      </ul>
+    </nav>
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -44,8 +46,11 @@ function App() {
         {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
       </Routes>
 
+
+
     </>
   )
 }
 
 export default App
+
