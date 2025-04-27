@@ -44,7 +44,7 @@ const Home: FC = () => {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1>Découvrez l’API de Recettes Ultime</h1>
-          <p>Accédez à des milliers de recettes, gérez vos favoris et partagez vos créations en quelques appels.</p>
+          <p>Accédez à des milliers de recettes, gérez vos favoris et partagez vos créations en quelques minutes.</p>
           <Link to="/register" className={styles.ctaButton}>
             Créer un compte gratuit
           </Link>

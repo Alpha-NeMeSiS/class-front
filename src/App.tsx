@@ -9,9 +9,9 @@ import Login from './pages/Login.tsx'
 import Register from './pages/Register.tsx'
 import ForgotPassword from './pages/ForgotPassword.tsx'
 import Profile from './pages/Profile.tsx'
-import MyRecipes from './pages/MyRecipes.tsx'
-import Favorites from './pages/Favorites.tsx'
-import SubmitRecipe from './pages/SubmitRecipe.tsx'
+import MyRecipes from './pages/MyRecipes/MyRecipes.tsx'
+import Favorites from './pages/Favorites/Favorites.tsx'
+import SubmitRecipe from './pages/SubmitRecipe/SubmitRecipe.tsx'
 
 
 
@@ -24,7 +24,7 @@ function App() {
       </div>
       <ul className="nav-list">
         <li><Link to="/">Accueil</Link></li>
-        <li><Link to="/my-submit">Mes Recettes</Link></li>
+        <li><Link to="/my-recipes">Mes Recettes</Link></li>
         <li><Link to="/submit">Ajoute une Recettes</Link></li>
         <li><Link to="/favorites">Favoris</Link></li>
       </ul>
