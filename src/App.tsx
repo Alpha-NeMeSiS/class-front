@@ -2,7 +2,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import './App.css'
 import Home from './pages/Home/Home'
 import Search from './pages/Search.tsx'
-import RecipeDetail from './pages/RecipeDetail.tsx'
+import RecipeDetail from './pages/RecipeDetail/RecipeDetail.tsx'
 import Category from './pages/Category.tsx'
 import Ingredient from './pages/Ingredient.tsx'
 import Login from './pages/Login/Login'
@@ -34,6 +34,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/recipes/:id" element={<RecipeDetail />} />
         <Route path="/recipes/:id" element={<RecipeDetail />} />
         <Route path="/categories/:slug" element={<Category />} />
         <Route path="/ingredients/:slug" element={<Ingredient />} />

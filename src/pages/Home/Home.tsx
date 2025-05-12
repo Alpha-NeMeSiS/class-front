@@ -46,7 +46,7 @@ const Home: FC = () => {
           <h1>Découvrez l’API de Recettes Ultime</h1>
           <p>Accédez à des milliers de recettes, gérez vos favoris et partagez vos créations en quelques minutes.</p>
           <Link to="/register" className={styles.ctaButton}>
-            Créer un compte gratuit
+            Créer un compte gratuitement
           </Link>
         </div>
         <div className={styles.heroImage} />
@@ -68,7 +68,7 @@ const Home: FC = () => {
 
       {/* Popular Recipes Section */}
       <section className={styles.popular}
->
+      >
         <h2>Top 5 des recettes populaires</h2>
         <div className={styles.popularList}>
           {popularRecipes.map((recipe) => (
@@ -81,6 +81,10 @@ const Home: FC = () => {
                     ★
                   </span>
                 ))}
+                {/* on passe l’id dans l’URL */}
+                <Link to={`/recipes/${recipe.id}`} className={styles.ctaButton}>
+                  Voir Plus
+                </Link>
               </div>
             </div>
           ))}
