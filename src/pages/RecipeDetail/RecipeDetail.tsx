@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import styles from './RecipeDetail.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft }     from '@fortawesome/free-solid-svg-icons';
 
 // Même source de données factices (ou remplacez par un fetch)
 const allRecipes = [
@@ -26,9 +28,12 @@ const RecipeDetail: FC = () => {
 
   return (
     <div className={styles.detail}>
-      <Link to="/" className={styles.backLink}>← Retour à l’accueil</Link>
+      <Link to="/" className={styles.backButton}>
+        <FontAwesomeIcon icon={faArrowLeft} className={styles.backIcon} />
+        Retour à l’accueil
+      </Link>
       <h1>{recipe.name}</h1>
-      <img src={recipe.image} alt={recipe.name} className={styles.image} />
+      <img src={recipe.image} className={styles.image} />
       <div className={styles.rating}>
         {[...Array(5)].map((_, i) => (
           <span key={i} className={i < recipe.rating ? styles.filled : ''}>★</span>
