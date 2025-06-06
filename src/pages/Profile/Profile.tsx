@@ -3,6 +3,7 @@ import React, { FC, useContext, useState, useEffect, ChangeEvent, FormEvent } fr
 import { AuthContext } from '../../contexts/AuthContext';
 import api from '../../api/api';
 import styles from './Profile.module.scss';
+import { Navigate } from 'react-router-dom';
 
 const Profile: FC = () => {
   const { user, setUser, logout } = useContext(AuthContext);
@@ -61,7 +62,7 @@ const Profile: FC = () => {
     }
   };
 
-  if (!user) return null;
+  if (!user) return <Navigate to="/login" />;
 
   return (
     <div className={styles.container}>
