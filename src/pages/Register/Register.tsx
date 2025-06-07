@@ -8,7 +8,7 @@ const Register: FC = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
-    surname:'',
+    surname: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -31,11 +31,12 @@ const Register: FC = () => {
     setLoading(true);
     try {
       await api.post('/auth/sigin', {
-        name: form.name,
-        surname: form.surname,  
+        nom: form.name,
+        prenom: form.surname,
         email: form.email,
         password: form.password,
       });
+
       navigate('/login');
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
