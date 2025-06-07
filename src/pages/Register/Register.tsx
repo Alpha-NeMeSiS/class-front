@@ -8,6 +8,7 @@ const Register: FC = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
+    surname:'',
     email: '',
     password: '',
     confirmPassword: '',
@@ -29,8 +30,9 @@ const Register: FC = () => {
     }
     setLoading(true);
     try {
-      await api.post('/auth/register', {
+      await api.post('/auth/sigin', {
         name: form.name,
+        surname: form.surname,  
         email: form.email,
         password: form.password,
       });
@@ -49,7 +51,7 @@ const Register: FC = () => {
         {error && <div className={styles.error}>{error}</div>}
 
         <label>
-          Nom complet
+          Nom
           <input
             type="text"
             name="name"
@@ -61,7 +63,19 @@ const Register: FC = () => {
         </label>
 
         <label>
-          Email
+          Prenom
+          <input
+            type="text"
+            name="surname"
+            value={form.surname}
+            onChange={handleChange}
+            placeholder="Votre nom"
+            required
+          />
+        </label>
+
+        <label>
+          Email <br />
           <input
             type="email"
             name="email"
@@ -73,7 +87,7 @@ const Register: FC = () => {
         </label>
 
         <label>
-          Mot de passe
+          Mot de passe <br />
           <input
             type="password"
             name="password"
