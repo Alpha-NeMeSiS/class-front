@@ -1,15 +1,11 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fdfdfd;
-  color: #333;
-}
+/* Styles globaux existants... */
 
+/* ----- Navbar ----- */
 .main-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ff6347; /* Couleur tomate style KookBook 🍅 */
+  background-color: #ff6347;
   padding: 1rem 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -29,14 +25,39 @@ body {
   padding: 0;
 }
 
+.nav-list li {
+  display: flex;
+  align-items: center;
+}
+
 .nav-list li a {
   text-decoration: none;
-  color: white;
+  color: #fff;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .nav-list li a:hover {
+  color: #ffe4d4;
+}
+
+.nav-user {
+  color: #fff;
+  font-weight: 600;
+  cursor: default;
+}
+
+
+.nav-logout-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-logout-button:hover {
   color: #ffe4d4;
 }
 
@@ -56,8 +77,10 @@ body {
     width: 100%;
   }
 
-  .nav-list li a {
+  .nav-list li a,
+  .nav-logout-button {
     display: block;
+    width: 100%;
     padding: 0.5rem 0;
   }
 }
