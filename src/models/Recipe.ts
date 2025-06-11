@@ -14,5 +14,6 @@ export interface Recipe {
   Budget: string;
   DietType: string;
   CreatedBy: string;
-
+  servings: number;
+  category: string;
 }

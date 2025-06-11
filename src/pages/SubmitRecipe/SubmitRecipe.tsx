@@ -1,7 +1,7 @@
 // src/pages/SubmitRecipe/SubmitRecipe.tsx
 import React, { FC, useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../api/api';
+import { createRecipe } from '../../services/recipeService';
 import styles from './SubmitRecipe.module.scss';
 
 interface NewRecipe {
@@ -45,7 +45,7 @@ const SubmitRecipe: FC = () => {
   };
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files?.[0]) {
       setForm(prev => ({ ...prev, image: e.target.files![0] }));
     }
   };
@@ -70,17 +70,28 @@ const SubmitRecipe: FC = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
     try {
       const data = new FormData();
       Object.entries(form).forEach(([key, val]) => {
-        if (key === 'image' && val) data.append('image', val as File);
-        else if (Array.isArray(val)) data.append(key, JSON.stringify(val));
-        else data.append(key, String(val));
+        if (key === 'image' && val) {
+          data.append('image', val as File);
+        } else if (Array.isArray(val)) {
+          // envoie chaque élément du tableau séparément
+          (val as string[]).forEach(item => data.append(key, item));
+        } else {
+          data.append(key, String(val));
+        }
       });
-      const res = await api.post('/recipes', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+
+      // Utilisation du service createRecipe
+      const res = await createRecipe(data);
+
+      // Redirection vers le détail de la recette créée
       navigate(`/recipes/${res.data.id}`);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors de la soumission');
+      console.error(err);
+      setError(err.response?.data?.message || 'Erreur lors de la soumission');
     } finally {
       setLoading(false);
     }
@@ -127,29 +138,51 @@ const SubmitRecipe: FC = () => {
         <label className={styles.fullWidth}>
           Image
           <input type="file" name="image" accept="image/*" onChange={handleFile} />
-          {form.image && <img className={styles.preview} src={URL.createObjectURL(form.image)} alt="Prévisualisation" />}
+          {form.image && (
+            <img
+              className={styles.preview}
+              src={URL.createObjectURL(form.image)}
+              alt="Prévisualisation"
+            />
+          )}
         </label>
 
         <fieldset className={styles.fieldset}>
           <legend>Ingrédients</legend>
           {form.ingredients.map((ing, i) => (
             <div key={i} className={styles.arrayItem}>
-              <input type="text" value={ing} onChange={e => updateArray('ingredients', i, e.target.value)} placeholder="Ingrédient" required />
+              <input
+                type="text"
+                value={ing}
+                onChange={e => updateArray('ingredients', i, e.target.value)}
+                placeholder="Ingrédient"
+                required
+              />
               <button type="button" onClick={() => removeItem('ingredients', i)}>×</button>
             </div>
           ))}
-          <button type="button" className={styles.addButton} onClick={() => addItem('ingredients')}>+ Ajouter ingrédient</button>
+          <button type="button" className={styles.addButton} onClick={() => addItem('ingredients')}>
+            + Ajouter ingrédient
+          </button>
         </fieldset>
 
         <fieldset className={styles.fieldset}>
           <legend>Étapes</legend>
           {form.instructions.map((step, i) => (
             <div key={i} className={styles.arrayItem}>
-              <input type="text" value={step} onChange={e => updateArray('instructions', i, e.target.value)} placeholder="Étape" required />
+              <input
+                type="text"
+                value={step}
+                onChange={e => updateArray('instructions', i, e.target.value)}
+                placeholder="Étape"
+                required
+              />
               <button type="button" onClick={() => removeItem('instructions', i)}>×</button>
             </div>
           ))}
-          <button type="button" className={styles.addButton} onClick={() => addItem('instructions')}>+ Ajouter étape</button>
+          <button type="button" className={styles.addButton} onClick={() => addItem('instructions')}>
+            + Ajouter étape
+          </button>
         </fieldset>
 
         <button type="submit" className={styles.submitButton} disabled={loading}>
