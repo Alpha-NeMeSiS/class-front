@@ -1,8 +1,8 @@
-// ===== src/pages/Search.tsx =====
+// src/pages/Search.tsx
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import api from '../api/api';
-import { Recipe } from '../models/Recipe';  // ← import du type
+import { useLocation, Link } from 'react-router-dom';
+import { searchRecipes } from '../services/recipeService';
+import { Recipe } from '../models/Recipe';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -11,20 +11,36 @@ function useQuery() {
 const Search: React.FC = () => {
   const query = useQuery();
   const [results, setResults] = useState<Recipe[]>([]);
+  const q = query.get('q')?.trim() || '';
 
   useEffect(() => {
-    const q = query.get('q') || '';
-    api.get<Recipe[]>(`/recipes/search?q=${q}`)
+    if (!q) {
+      setResults([]);
+      return;
+    }
+
+    searchRecipes(q)
       .then(res => setResults(res.data))
-      .catch(err => console.error(err));
-  }, [query]);
+      .catch(err => console.error('Erreur recherche :', err));
+  }, [q]);
 
   return (
     <div>
-      <h1>Résultats pour "{query.get('q')}"</h1>
-      <ul>
-        {results.map(r => (<li key={r.id}>{r.title}</li>))}
-      </ul>
+      <h1>Résultats pour “{q}”</h1>
+
+      {q === '' ? (
+        <p>Saisissez un mot-clé pour rechercher des recettes.</p>
+      ) : results.length === 0 ? (
+        <p>Aucune recette trouvée pour “{q}”.</p>
+      ) : (
+        <ul>
+          {results.map(r => (
+            <li key={r.id}>
+              <Link to={`/recipes/${r.id}`}>{r.title}</Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
