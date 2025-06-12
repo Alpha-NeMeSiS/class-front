@@ -1,5 +1,4 @@
 // src/App.tsx
-import React from 'react';
 import { Link, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 
@@ -17,15 +16,22 @@ import Favorites from './pages/Favorites/Favorites';
 import SubmitRecipe from './pages/SubmitRecipe/SubmitRecipe';
 import { useAuth } from './contexts/useAuth';
 import PrivateRoute from './routes/PrivateRoute';
+import React, { useState } from 'react';
 
 function App() {
   const { user, logout } = useAuth();
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <>
       <nav className="main-nav">
-        <div className="logo">KookBook</div>
-        <ul className="nav-list">
+        <div className="nav-header">
+          <div className="logo">KookBook</div>
+          <button className="burger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            ☰
+          </button>
+        </div>
+
+        <ul className={`nav-list ${isMenuOpen ? 'open' : ''}`}>
           <li><Link to="/">Accueil</Link></li>
           <li><Link to="/my-recipes">Mes Recettes</Link></li>
           <li><Link to="/submit">Ajoute une Recette</Link></li>
@@ -33,8 +39,14 @@ function App() {
 
           {user ? (
             <>
-              <li className="nav-user">Bonjour, {user.name}</li>
-              <li>
+              <li className="nav-user">
+                <Link to="/profile">
+                  <img
+                    src={'https://www.gravatar.com/avatar/?d=mp'}
+                    alt="Profil"
+                    className="nav-avatar"
+                  />
+                </Link>
                 <button onClick={logout} className="nav-logout-button">
                   Déconnexion
                 </button>
@@ -44,8 +56,7 @@ function App() {
             <li><Link to="/login">Connexion</Link></li>
           )}
         </ul>
-      </nav>
-
+      </nav >
       <Routes>
         {/* routes publiques */}
         <Route path="/" element={<Home />} />

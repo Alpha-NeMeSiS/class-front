@@ -1,13 +1,14 @@
-/* Styles globaux existants... */
-
 /* ----- Navbar ----- */
 .main-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background-color: #ff6347;
   padding: 1rem 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
@@ -17,12 +18,24 @@
   letter-spacing: 1px;
 }
 
+/* BOUTON BURGER */
+.burger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* LISTE DU MENU */
 .nav-list {
   list-style: none;
   display: flex;
   gap: 1.5rem;
   margin: 0;
   padding: 0;
+  transition: all 0.3s ease-in-out;
 }
 
 .nav-list li {
@@ -42,12 +55,22 @@
 }
 
 .nav-user {
-  color: #fff;
-  font-weight: 600;
-  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* 🌟 NOUVEAU : AVATAR ROND */
+.nav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  background-color: #fff;
+}
 
+/* Bouton Déconnexion */
 .nav-logout-button {
   background: none;
   border: none;
@@ -61,20 +84,34 @@
   color: #ffe4d4;
 }
 
+/* 🎯 RESPONSIVE VERSION */
 @media (max-width: 600px) {
   .main-nav {
     flex-direction: column;
     align-items: flex-start;
   }
 
+  .burger {
+    display: block;
+  }
+
   .nav-list {
+    display: none;
     flex-direction: column;
     width: 100%;
     margin-top: 1rem;
+    background-color: #ff6347;
+    border-radius: 0 0 0.5rem 0.5rem;
+    padding: 1rem 0;
+  }
+
+  .nav-list.open {
+    display: flex;
   }
 
   .nav-list li {
     width: 100%;
+    padding: 0.3rem 1rem;
   }
 
   .nav-list li a,
@@ -82,5 +119,13 @@
     display: block;
     width: 100%;
     padding: 0.5rem 0;
+    text-align: left;
+  }
+
+  /* Avatar responsive */
+  .nav-avatar {
+    width: 40px;
+    height: 40px;
+    margin: 0.5rem 0;
   }
 }

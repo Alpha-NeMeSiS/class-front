@@ -12,7 +12,7 @@ const Home: FC = () => {
   useEffect(() => {
     getLatestRecipes()
       .then(recipesArray => {
-        console.log('recipesArray:', recipesArray); // devrait afficher un tableau
+        console.log('recipesArray:', recipesArray);
         setRecipes(recipesArray);
       })
       .catch(err => console.error('Erreur chargement recettes :', err));
@@ -25,10 +25,32 @@ const Home: FC = () => {
   };
 
   return (
+    
     <div className={styles.Home}>
-      {/* … sections Hero et Recherche … */}
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          <h1>Bienvenue sur KookBook</h1>
+          <p>Une API pensée pour les gourmets : gérez, créez et savourez vos recettes en toute simplicité.</p>
+          <Link to="/register" className={styles.signupButton}>
+            Créer votre compte gratuitement
+          </Link>
+
+        </div>
+      </section>
+
+      <div className={styles.searchBar}>
+        <input
+          type="text"
+          placeholder="Rechercher une recette..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className={styles.searchInput}
+        />
+      </div>
 
       <section className={styles.popular}>
+        <br />
         <h2>Recettes du moment</h2>
         <div className={styles.popularList}>
           {recipes.length > 0 ? (
