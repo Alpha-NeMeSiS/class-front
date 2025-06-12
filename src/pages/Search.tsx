@@ -1,4 +1,3 @@
-// src/pages/Search.tsx
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { searchRecipes } from '../services/recipeService';
@@ -20,7 +19,7 @@ const Search: React.FC = () => {
     }
 
     searchRecipes(q)
-      .then(res => setResults(res.data))
+      .then(recipesArray => setResults(recipesArray))
       .catch(err => console.error('Erreur recherche :', err));
   }, [q]);
 

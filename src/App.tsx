@@ -1,6 +1,6 @@
 // src/App.tsx
 import React from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 
 import Home from './pages/Home/Home';
@@ -15,11 +15,11 @@ import Profile from './pages/Profile/Profile';
 import MyRecipes from './pages/MyRecipes/MyRecipes';
 import Favorites from './pages/Favorites/Favorites';
 import SubmitRecipe from './pages/SubmitRecipe/SubmitRecipe';
-import { useAuth } from './contexts/useAuth';     
+import { useAuth } from './contexts/useAuth';
 import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
-  const { user, logout } = useAuth();              
+  const { user, logout } = useAuth();
 
   return (
     <>
@@ -47,25 +47,47 @@ function App() {
       </nav>
 
       <Routes>
+        {/* routes publiques */}
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/recipes/:id" element={<RecipeDetail />} />
         <Route path="/categories/:slug" element={<Category />} />
         <Route path="/ingredients/:slug" element={<Ingredient />} />
 
-        {!user && (
-          <>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-          </>
-        )}
+        {/* on déclare toujours ces routes, même si l'utilisateur est connecté */}
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" replace /> : <Login />}
+        />
+        <Route
+          path="/register"
+          element={user ? <Navigate to="/" replace /> : <Register />}
+        />
+        <Route
+          path="/forgot-password"
+          element={user ? <Navigate to="/" replace /> : <ForgotPassword />}
+        />
 
-        {/* 🔐 Routes protégées */}
-        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-        <Route path="/my-recipes" element={<PrivateRoute><MyRecipes /></PrivateRoute>} />
-        <Route path="/favorites" element={<PrivateRoute><Favorites /></PrivateRoute>} />
-        <Route path="/submit" element={<PrivateRoute><SubmitRecipe /></PrivateRoute>} />
+        {/* 🔐 routes protégées */}
+        <Route
+          path="/profile"
+          element={<PrivateRoute><Profile /></PrivateRoute>}
+        />
+        <Route
+          path="/my-recipes"
+          element={<PrivateRoute><MyRecipes /></PrivateRoute>}
+        />
+        <Route
+          path="/favorites"
+          element={<PrivateRoute><Favorites /></PrivateRoute>}
+        />
+        <Route
+          path="/submit"
+          element={<PrivateRoute><SubmitRecipe /></PrivateRoute>}
+        />
+
+        {/* éventuellement une 404 */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

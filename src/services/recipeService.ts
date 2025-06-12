@@ -1,59 +1,41 @@
-// src/services/recipeService.ts
 import api from '../api/api';
 import { Recipe } from '../models/Recipe';
 
-/**
- * Récupère les recettes du moment (toutes les recettes ou endpoint dédié).
- */
-export const getLatestRecipes = () =>
-  api.get<Recipe[]>('/recipes');
+/** Récupère toutes les recettes sous forme de Recipe[] */
+export const getLatestRecipes = (): Promise<Recipe[]> =>
+  api.get<Recipe[]>('/recipes').then(res => res.data);
 
-/**
- * Récupère le détail d’une recette par son ID.
- */
-export const getRecipeById = (id: number) =>
-  api.get<Recipe>(`/recipes/${id}`);
+/** Récupère une recette par ID */
+export const getRecipeById = (id: number): Promise<Recipe> =>
+  api.get<Recipe>(`/recipes/${id}`).then(res => res.data);
 
-/**
- * Recherche de recettes par mot-clé.
- */
-export const searchRecipes = (query: string) =>
-  api.get<Recipe[]>('/recipes/search', {
-    params: { query }
-  });
+/** Recherche de recettes par mot-clé et renvoie directement Recipe[] */
+export const searchRecipes = (query: string): Promise<Recipe[]> =>
+  api
+    .get<Recipe[]>('/recipes/search', { params: { query } })
+    .then(res => res.data);
 
-/**
- * Crée une nouvelle recette.
- * @param recipeData Données de la recette (peut être un FormData pour inclure image).
- */
-export const createRecipe = (recipeData: Partial<Recipe> | FormData) =>
-  api.post<Recipe>('/recipes', recipeData);
+/** Crée une nouvelle recette et renvoie directement le Recipe créé */
+export const createRecipe = (
+  recipeData: Partial<Recipe> | FormData
+): Promise<Recipe> =>
+  api.post<Recipe>('/recipes', recipeData).then(res => res.data);
 
-/**
- * Met à jour une recette existante.
- * @param id ID de la recette à mettre à jour.
- * @param recipeData Données mises à jour (peut être un FormData pour inclure image).
- */
-export const updateRecipe = (id: number, recipeData: Partial<Recipe> | FormData) =>
-  api.put<Recipe>(`/recipes/${id}`, recipeData);
+/** Met à jour une recette existante */
+export const updateRecipe = (
+  id: number,
+  recipeData: Partial<Recipe> | FormData
+): Promise<Recipe> =>
+  api.put<Recipe>(`/recipes/${id}`, recipeData).then(res => res.data);
 
-/**
- * Supprime une recette.
- * @param id ID de la recette à supprimer.
- */
-export const deleteRecipe = (id: number) =>
-  api.delete<void>(`/recipes/${id}`);
+/** Supprime une recette */
+export const deleteRecipe = (id: number): Promise<void> =>
+  api.delete<void>(`/recipes/${id}`).then(res => res.data);
 
-/**
- * Propose des recettes à partir d’une liste d’ingrédients.
- * @param ingredients Tableau de noms d’ingrédients.
- */
-export const suggestRecipes = (ingredients: string[]) =>
-  api.post<Recipe[]>('/recipes/suggest', { ingredients });
+/** Suggère des recettes selon des ingrédients */
+export const suggestRecipes = (ingredients: string[]): Promise<Recipe[]> =>
+  api.post<Recipe[]>('/recipes/suggest', { ingredients }).then(res => res.data);
 
-/**
- * Génère une liste de courses pour une recette donnée.
- * @param recipeId ID de la recette.
- */
-export const generateShoppingList = (recipeId: number) =>
-  api.post<string[]>('/recipes/shopping-list', { recipeId });
+/** Génère la liste de courses pour une recette */
+export const generateShoppingList = (recipeId: number): Promise<string[]> =>
+  api.post<string[]>('/recipes/shopping-list', { recipeId }).then(res => res.data);
