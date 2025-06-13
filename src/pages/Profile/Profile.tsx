@@ -8,11 +8,12 @@ import { Navigate } from 'react-router-dom';
 const Profile: FC = () => {
   const { user, setUser, logout } = useContext(AuthContext);
   const [form, setForm] = useState({
-    name: user?.name || '',
+    firstName: user?.name || '',
+    lastName: user?.name || '',
     email: user?.email || '',
     avatarFile: null as File | null,
-    // avatarPreview: user?.avatar || '',
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -21,9 +22,9 @@ const Profile: FC = () => {
     if (user) {
       setForm(prev => ({
         ...prev,
-        name: user.name,
-        email: user.email,
-        // avatarPreview: user.avatar || '',
+        firstName: user.name || '',
+        lastName: user.name || '',
+        email: user.email || '',
       }));
     }
   }, [user]);
@@ -47,7 +48,8 @@ const Profile: FC = () => {
     setSuccess(null);
     try {
       const data = new FormData();
-      data.append('name', form.name);
+      data.append('firstName', form.firstName);
+      data.append('lastName', form.lastName);
       data.append('email', form.email);
       if (form.avatarFile) data.append('avatar', form.avatarFile);
       const res = await api.put('/users/me', data, {
@@ -82,15 +84,27 @@ const Profile: FC = () => {
         </div> */}
 
         <label>
-          Nom
+          Prénom
           <input
             type="text"
-            name="name"
-            value={form.name}
+            name="firstName"
+            value={form.firstName}
             onChange={handleInput}
             required
           />
         </label>
+
+        <label>
+          Nom
+          <input
+            type="text"
+            name="lastName"
+            value={form.lastName}
+            onChange={handleInput}
+            required
+          />
+        </label>
+
 
         <label>
           Email
