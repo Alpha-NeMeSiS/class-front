@@ -1,11 +1,14 @@
-// src/pages/SubmitRecipe/SubmitRecipe.tsx
-
 import React, { FC, useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createRecipe } from '../../services/recipeService';
+import { useAuth } from '../../contexts/useAuth';
 import styles from './SubmitRecipe.module.scss';
 import { Recipe } from '../../models/Recipe';
 
+interface IngredientItem {
+  name: string;
+  unit: string;
+}
 interface NewRecipe {
   title: string;
   description: string;
@@ -14,7 +17,7 @@ interface NewRecipe {
   cookTime: number;
   servings: number;
   category: string;
-  ingredients: string[];
+  ingredients: IngredientItem[];
   instructions: string[];
 }
 
@@ -22,6 +25,7 @@ const categories = ['Entrées', 'Plats', 'Desserts', 'Végétarien', 'Rapide'];
 
 const SubmitRecipe: FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [form, setForm] = useState<NewRecipe>({
     title: '',
@@ -31,12 +35,13 @@ const SubmitRecipe: FC = () => {
     cookTime: 0,
     servings: 1,
     category: categories[0],
-    ingredients: [''],
+    ingredients: [{ name: '', unit: '' }],
     instructions: [''],
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // champs scalaires
   const handleInput = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -49,62 +54,105 @@ const SubmitRecipe: FC = () => {
     }));
   };
 
+  // fichier image
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setForm(prev => ({ ...prev, image: e.target.files![0] }));
     }
   };
 
-  const updateArray = (
-    field: 'ingredients' | 'instructions',
-    idx: number,
-    value: string
-  ) => {
+  // nom d'un ingrédient
+  const updateIngredientName = (idx: number, value: string) => {
     setForm(prev => {
-      const arr = [...prev[field]];
-      arr[idx] = value;
-      return { ...prev, [field]: arr };
+      const arr = [...prev.ingredients];
+      arr[idx].name = value;
+      return { ...prev, ingredients: arr };
     });
   };
 
-  const addItem = (field: 'ingredients' | 'instructions') => {
-    setForm(prev => ({ ...prev, [field]: [...prev[field], ''] }));
+  // unité d'un ingrédient
+  const updateIngredientUnit = (idx: number, value: string) => {
+    setForm(prev => {
+      const arr = [...prev.ingredients];
+      arr[idx].unit = value;
+      return { ...prev, ingredients: arr };
+    });
   };
 
-  const removeItem = (field: 'ingredients' | 'instructions', idx: number) => {
+  // ajouter / supprimer ingrédients
+  const addIngredient = () =>
     setForm(prev => ({
       ...prev,
-      [field]: prev[field].filter((_, i) => i !== idx),
+      ingredients: [...prev.ingredients, { name: '', unit: '' }],
     }));
+  const removeIngredient = (idx: number) =>
+    setForm(prev => ({
+      ...prev,
+      ingredients: prev.ingredients.filter((_, i) => i !== idx),
+    }));
+
+  // étapes (inchangé)
+  const updateStep = (idx: number, value: string) => {
+    setForm(prev => {
+      const arr = [...prev.instructions];
+      arr[idx] = value;
+      return { ...prev, instructions: arr };
+    });
   };
+  const addStep = () =>
+    setForm(prev => ({ ...prev, instructions: [...prev.instructions, ''] }));
+  const removeStep = (idx: number) =>
+    setForm(prev => ({
+      ...prev,
+      instructions: prev.instructions.filter((_, i) => i !== idx),
+    }));
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    console.log('🌿 Ingredients to send:', form.ingredients);
+    console.log('🔢 Instructions to send:', form.instructions);
+
     setLoading(true);
     setError(null);
 
     try {
-      // Build FormData
       const data = new FormData();
-      Object.entries(form).forEach(([key, val]) => {
-        if (key === 'image' && val) {
-          data.append('image', val as File);
-        } else if (Array.isArray(val)) {
-          // append each element with the same key
-          (val as string[]).forEach(item => data.append(key, item));
-        } else {
-          data.append(key, String(val));
-        }
+      data.append('title', form.title);
+      data.append('description', form.description);
+      data.append('category', form.category);
+      data.append('preparationTime', form.prepTime.toString());
+      data.append('cookingTime', form.cookTime.toString());
+      data.append('servings', form.servings.toString());
+      if (form.image) {
+        data.append('image', form.image, form.image.name);
+      }
+
+      // on envoie deux tableaux de même longueur
+      form.ingredients.forEach(({ name, unit }) => {
+        data.append('ingredients', name);
+        data.append('ingredientUnits', unit);
       });
+      form.instructions.forEach(s => data.append('instructions', s));
 
-      // call service — returns a Recipe directly
-      const createdRecipe: Recipe = await createRecipe(data);
+      if (user?.id) {
+        data.append('userId', user.id);
+      }
 
-      // navigate using createdRecipe.id
-      navigate(`/recipes/${createdRecipe.id}`);
+      for (let pair of data.entries()) {
+        console.log('📦 FormData entry:', pair[0], '→', pair[1]);
+      }
+      
+      await createRecipe(data).then((created: Recipe) => {
+        navigate(`/recipes/${created.id}`);
+      });
     } catch (err: any) {
-      console.error(err);
-      setError(err.response?.data?.message || 'Erreur lors de la soumission');
+      console.error(err.response?.data);
+      setError(
+        err.response?.data?.errors
+          ? Object.values(err.response.data.errors).flat().join(' • ')
+          : err.response?.data?.message || 'Erreur lors de la soumission'
+      );
     } finally {
       setLoading(false);
     }
@@ -115,13 +163,13 @@ const SubmitRecipe: FC = () => {
       <h1>Ajouter une recette</h1>
       {error && <div className={styles.error}>{error}</div>}
       <form onSubmit={handleSubmit} className={styles.form}>
-        {/* Ligne Titre + Catégorie */}
+        {/* Titre + Catégorie */}
         <div className={styles.row}>
           <label>
             Titre
             <input
-              type="text"
               name="title"
+              type="text"
               value={form.title}
               onChange={handleInput}
               required
@@ -134,10 +182,8 @@ const SubmitRecipe: FC = () => {
               value={form.category}
               onChange={handleInput}
             >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+              {categories.map(c => (
+                <option key={c} value={c}>{c}</option>
               ))}
             </select>
           </label>
@@ -148,57 +194,37 @@ const SubmitRecipe: FC = () => {
           Description
           <textarea
             name="description"
+            rows={3}
             value={form.description}
             onChange={handleInput}
-            rows={3}
           />
         </label>
 
-        {/* Préparation / Cuisson / Portions */}
+        {/* Durées & portions */}
         <div className={styles.row}>
           <label>
             Préparation (min)
-            <input
-              type="number"
-              name="prepTime"
-              value={form.prepTime}
-              onChange={handleInput}
-              min={0}
-            />
+            <input name="prepTime" type="number" min={0}
+              value={form.prepTime} onChange={handleInput} />
           </label>
           <label>
             Cuisson (min)
-            <input
-              type="number"
-              name="cookTime"
-              value={form.cookTime}
-              onChange={handleInput}
-              min={0}
-            />
+            <input name="cookTime" type="number" min={0}
+              value={form.cookTime} onChange={handleInput} />
           </label>
           <label>
             Portions
-            <input
-              type="number"
-              name="servings"
-              value={form.servings}
-              onChange={handleInput}
-              min={1}
-            />
+            <input name="servings" type="number" min={1}
+              value={form.servings} onChange={handleInput} />
           </label>
         </div>
 
         {/* Image */}
         <label className={styles.fullWidth}>
           Image
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            onChange={handleFile}
-          />
+          <input type="file"  accept="image/*" onChange={handleFile} />
           {form.image && (
-            <img
+            <img 
               className={styles.preview}
               src={URL.createObjectURL(form.image)}
               alt="Prévisualisation"
@@ -213,24 +239,23 @@ const SubmitRecipe: FC = () => {
             <div key={i} className={styles.arrayItem}>
               <input
                 type="text"
-                value={ing}
-                onChange={e => updateArray('ingredients', i, e.target.value)}
-                placeholder="Ingrédient"
+                placeholder="Nom"
+                value={ing.name}
+                onChange={e => updateIngredientName(i, e.target.value)}
                 required
               />
-              <button
-                type="button"
-                onClick={() => removeItem('ingredients', i)}
-              >
+              <input
+                type="text"
+                placeholder="Quantitée (g, ml…)"
+                value={ing.unit}
+                onChange={e => updateIngredientUnit(i, e.target.value)}
+              />
+              <button type="button" onClick={() => removeIngredient(i)}>
                 ×
               </button>
             </div>
           ))}
-          <button
-            type="button"
-            className={styles.addButton}
-            onClick={() => addItem('ingredients')}
-          >
+          <button type="button" className={styles.addButton} onClick={addIngredient}>
             + Ajouter ingrédient
           </button>
         </fieldset>
@@ -242,37 +267,23 @@ const SubmitRecipe: FC = () => {
             <div key={i} className={styles.arrayItem}>
               <input
                 type="text"
-                value={step}
-                onChange={e =>
-                  updateArray('instructions', i, e.target.value)
-                }
                 placeholder="Étape"
+                value={step}
+                onChange={e => updateStep(i, e.target.value)}
                 required
               />
-              <button
-                type="button"
-                onClick={() => removeItem('instructions', i)}
-              >
+              <button type="button" onClick={() => removeStep(i)}>
                 ×
               </button>
             </div>
           ))}
-          <button
-            type="button"
-            className={styles.addButton}
-            onClick={() => addItem('instructions')}
-          >
+          <button type="button" className={styles.addButton} onClick={addStep}>
             + Ajouter étape
           </button>
         </fieldset>
 
-        {/* Bouton de soumission */}
-        <button
-          type="submit"
-          className={styles.submitButton}
-          disabled={loading}
-        >
-          {loading ? 'Envoi...' : 'Envoyer la recette'}
+        <button type="submit" className={styles.submitButton} disabled={loading}>
+          {loading ? 'Envoi…' : 'Envoyer la recette'}
         </button>
       </form>
     </div>
