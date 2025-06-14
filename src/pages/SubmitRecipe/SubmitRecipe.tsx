@@ -110,8 +110,8 @@ const SubmitRecipe: FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    console.log('🌿 Ingredients to send:', form.ingredients);
-    console.log('🔢 Instructions to send:', form.instructions);
+    // console.log('🌿 Ingredients to send:', form.ingredients);
+    // console.log('🔢 Instructions to send:', form.instructions);
 
     setLoading(true);
     setError(null);
@@ -139,12 +139,12 @@ const SubmitRecipe: FC = () => {
         data.append('userId', user.id);
       }
 
-      for (let pair of data.entries()) {
-        console.log('📦 FormData entry:', pair[0], '→', pair[1]);
-      }
-      
+      // for (let pair of data.entries()) {
+      //   console.log('📦 FormData entry:', pair[0], '→', pair[1]);
+      // }
+
       await createRecipe(data).then((created: Recipe) => {
-        navigate(`/recipes/${created.id}`);
+        navigate(`/my-recipes/`);
       });
     } catch (err: any) {
       console.error(err.response?.data);
@@ -222,9 +222,9 @@ const SubmitRecipe: FC = () => {
         {/* Image */}
         <label className={styles.fullWidth}>
           Image
-          <input type="file"  accept="image/*" onChange={handleFile} />
+          <input type="file" accept="image/*" onChange={handleFile} />
           {form.image && (
-            <img 
+            <img
               className={styles.preview}
               src={URL.createObjectURL(form.image)}
               alt="Prévisualisation"

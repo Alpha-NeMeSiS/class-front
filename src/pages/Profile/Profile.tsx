@@ -8,8 +8,7 @@ import { Navigate } from 'react-router-dom';
 const Profile: FC = () => {
   const { user, setUser, logout } = useContext(AuthContext);
   const [form, setForm] = useState({
-    firstName: user?.name || '',
-    lastName: user?.name || '',
+    username: user?.name || '',
     email: user?.email || '',
     avatarFile: null as File | null,
   });
@@ -22,8 +21,7 @@ const Profile: FC = () => {
     if (user) {
       setForm(prev => ({
         ...prev,
-        firstName: user.name || '',
-        lastName: user.name || '',
+        username: user.name || '',
         email: user.email || '',
       }));
     }
@@ -48,8 +46,7 @@ const Profile: FC = () => {
     setSuccess(null);
     try {
       const data = new FormData();
-      data.append('firstName', form.firstName);
-      data.append('lastName', form.lastName);
+      data.append('username', form.username);
       data.append('email', form.email);
       if (form.avatarFile) data.append('avatar', form.avatarFile);
       const res = await api.put('/users/me', data, {
@@ -84,22 +81,11 @@ const Profile: FC = () => {
         </div> */}
 
         <label>
-          Prénom
+          Nom d'Utilisateur
           <input
             type="text"
-            name="firstName"
-            value={form.firstName}
-            onChange={handleInput}
-            required
-          />
-        </label>
-
-        <label>
-          Nom
-          <input
-            type="text"
-            name="lastName"
-            value={form.lastName}
+            name="username"
+            value={form.username}
             onChange={handleInput}
             required
           />
