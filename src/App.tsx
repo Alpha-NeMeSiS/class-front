@@ -4,7 +4,7 @@ import { Link, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 
 import Home from './pages/Home/Home';
-import Search from './pages/Search';
+import Search from './pages/Search/Search';
 import RecipeDetail from './pages/RecipeDetail/RecipeDetail';
 import Category from './pages/Category';
 import Ingredient from './pages/Ingredient';

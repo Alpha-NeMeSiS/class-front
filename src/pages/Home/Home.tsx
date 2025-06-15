@@ -66,7 +66,7 @@ const Home: FC = () => {
               <div key={recipe.recipeId} className={styles.popularItem}>
                 {recipe.imageUrl && (
                   <img
-                    //src={`http://localhost:5148${recipe.imageUrl}`}
+                    src={`http://localhost:5148${recipe.imageUrl}`}
                     alt={recipe.title}
                     className={styles.popularImg}
                   />
