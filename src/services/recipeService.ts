@@ -1,5 +1,4 @@
 // src/services/recipeService.ts
-
 import api from '../api/api';
 import { Recipe } from '../models/Recipe';
 
@@ -16,9 +15,11 @@ export const getRecipeById = (id: number): Promise<Recipe> =>
   api.get<Recipe>(`/recipes/${id}`).then(res => res.data);
 
 /** Recherche de recettes par mot-clé */
-export const searchRecipes = (query: string): Promise<Recipe[]> =>
+export const searchRecipes = (q: string): Promise<Recipe[]> =>
   api
-    .get<Recipe[]>('/recipes/search', { params: { query } })
+    .get<Recipe[]>('/recipes/search', {
+      params: { q }               // <-- on envoie désormais ?q=… et non plus ?query=…
+    })
     .then(res => res.data);
 
 /** Crée une nouvelle recette (accepte FormData → multipart/form-data) */

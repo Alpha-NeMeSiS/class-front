@@ -9,8 +9,8 @@ function useQuery() {
 
 const Search: React.FC = () => {
   const query = useQuery();
-  const [results, setResults] = useState<Recipe[]>([]);
   const q = query.get('q')?.trim() || '';
+  const [results, setResults] = useState<Recipe[]>([]);
 
   useEffect(() => {
     if (!q) {
