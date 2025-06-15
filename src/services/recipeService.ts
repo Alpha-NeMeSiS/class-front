@@ -27,14 +27,11 @@ export const createRecipe = (
   recipeData: Partial<Recipe> | FormData
 ): Promise<Recipe> => {
   if (recipeData instanceof FormData) {
-    return api
-      .post<Recipe>('/recipes', recipeData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+    return api.post<Recipe>('/recipes', recipeData)
       .then(res => res.data);
   }
   return api.post<Recipe>('/recipes', recipeData).then(res => res.data);
-};
+};te
 
 /** Met à jour une recette existante (accepte aussi FormData) */
 export const updateRecipe = (
@@ -43,9 +40,7 @@ export const updateRecipe = (
 ): Promise<Recipe> => {
   if (recipeData instanceof FormData) {
     return api
-      .put<Recipe>(`/recipes/${id}`, recipeData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+      .put<Recipe>(`/recipes/${id}`, recipeData)
       .then(res => res.data);
   }
   return api.put<Recipe>(`/recipes/${id}`, recipeData).then(res => res.data);

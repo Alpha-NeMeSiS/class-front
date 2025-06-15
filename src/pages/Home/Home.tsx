@@ -3,11 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Home.module.scss';
 import { getLatestRecipes } from '../../services/recipeService';
 import { Recipe } from '../../models/Recipe';
+import { useAuth } from '../../contexts/useAuth';
 
 const Home: FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
+
+  // Récupération de l'état d'authentification
+  const { user } = useAuth();
 
   useEffect(() => {
     getLatestRecipes()
@@ -25,16 +29,20 @@ const Home: FC = () => {
   };
 
   return (
-    
     <div className={styles.Home}>
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1>Bienvenue sur KookBook</h1>
-          <p>Une API pensée pour les gourmets : gérez, créez et savourez vos recettes en toute simplicité.</p>
-          <Link to="/register" className={styles.signupButton}>
-            Créer votre compte gratuitement
-          </Link>
+          <p>
+            Une API pensée pour les gourmets : gérez, créez et savourez vos
+            recettes en toute simplicité.
+          </p>
 
+          { !user && (
+            <Link to="/register" className={styles.signupButton}>
+              Créer votre compte gratuitement
+            </Link>
+          )}
         </div>
       </section>
 
@@ -58,13 +66,16 @@ const Home: FC = () => {
               <div key={recipe.recipeId} className={styles.popularItem}>
                 {recipe.imageUrl && (
                   <img
-                    src={recipe.imageUrl}
+                    //src={`http://localhost:5148${recipe.imageUrl}`}
                     alt={recipe.title}
                     className={styles.popularImg}
                   />
                 )}
                 <h3>{recipe.title}</h3>
-                <Link to={`/recipes/${recipe.recipeId}`} className={styles.ctaButton}>
+                <Link
+                  to={`/recipes/${recipe.recipeId}`}
+                  className={styles.ctaButton}
+                >
                   Voir la recette
                 </Link>
               </div>

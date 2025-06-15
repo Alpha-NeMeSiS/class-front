@@ -57,7 +57,7 @@ const RecipeDetail: FC = () => {
 
       {recipe.imageUrl && (
         <img
-          src={`http://localhost:5148${recipe.imageUrl}`} 
+          src={`http://localhost:5148${recipe.imageUrl}`}
           alt={recipe.title}
           className={styles.image}
         />
@@ -85,18 +85,20 @@ const RecipeDetail: FC = () => {
         </section>
       )}
 
-      {recipe.ingredients.length > 0 && (
+      {recipe.ingredients?.length > 0 && (
         <section className={styles.section}>
           <h2>Ingrédients</h2>
           <ul>
             {recipe.ingredients.map((ing, idx) => (
-              <li key={idx}>{ing.name}{ing.unit ? ` — ${ing.unit}` : ''}</li>
+              <li key={idx}>
+                {ing.name}
+                {ing.unit ? ` — ${ing.unit}` : ''}
+              </li>
             ))}
           </ul>
         </section>
       )}
-
-      {recipe.steps.length > 0 && (
+      {recipe.steps?.length > 0 && (
         <section className={styles.section}>
           <h2>Préparation</h2>
           <ol>
