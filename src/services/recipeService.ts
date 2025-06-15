@@ -31,7 +31,7 @@ export const createRecipe = (
       .then(res => res.data);
   }
   return api.post<Recipe>('/recipes', recipeData).then(res => res.data);
-};te
+};
 
 /** Met à jour une recette existante (accepte aussi FormData) */
 export const updateRecipe = (
