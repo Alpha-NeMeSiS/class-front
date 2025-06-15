@@ -7,6 +7,10 @@ import { Recipe } from '../models/Recipe';
 export const getLatestRecipes = (): Promise<Recipe[]> =>
   api.get<Recipe[]>('/recipes').then(res => res.data);
 
+/** Récupère les recettes de l’utilisateur connecté */
+export const getMyRecipes = (): Promise<Recipe[]> =>
+  api.get<Recipe[]>('/recipes/me').then(res => res.data);
+
 /** Récupère une recette par ID */
 export const getRecipeById = (id: number): Promise<Recipe> =>
   api.get<Recipe>(`/recipes/${id}`).then(res => res.data);

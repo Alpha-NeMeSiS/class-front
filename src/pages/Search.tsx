@@ -34,8 +34,8 @@ const Search: React.FC = () => {
       ) : (
         <ul>
           {results.map(r => (
-            <li key={r.id}>
-              <Link to={`/recipes/${r.id}`}>{r.title}</Link>
+            <li key={r.recipeId}>
+              <Link to={`/recipes/${r.recipeId}`}>{r.title}</Link>
             </li>
           ))}
         </ul>

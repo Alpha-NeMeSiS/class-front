@@ -55,7 +55,7 @@ const Home: FC = () => {
         <div className={styles.popularList}>
           {recipes.length > 0 ? (
             recipes.map(recipe => (
-              <div key={recipe.id} className={styles.popularItem}>
+              <div key={recipe.recipeId} className={styles.popularItem}>
                 {recipe.imageUrl && (
                   <img
                     src={recipe.imageUrl}
@@ -64,7 +64,7 @@ const Home: FC = () => {
                   />
                 )}
                 <h3>{recipe.title}</h3>
-                <Link to={`/recipes/${recipe.id}`} className={styles.ctaButton}>
+                <Link to={`/recipes/${recipe.recipeId}`} className={styles.ctaButton}>
                   Voir la recette
                 </Link>
               </div>

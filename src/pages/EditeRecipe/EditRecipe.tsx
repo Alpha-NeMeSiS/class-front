@@ -97,8 +97,8 @@ const EditRecipe: FC = () => {
       // Champs simples
       data.append('title', form.title || '');
       data.append('description', form.description || '');
-      data.append('PreparationTime', String(form.PreparationTime));
-      data.append('CookingTime', String(form.CookingTime));
+      data.append('PreparationTime', String(form.preparationTime));
+      data.append('CookingTime', String(form.cookingTime));
       data.append('servings', String(form.servings));
       data.append('category', form.category || '');
 
@@ -152,11 +152,11 @@ const EditRecipe: FC = () => {
         <div className={styles.row}>
           <label>
             Prép. (min)
-            <input type="number" name="PreparationTime" value={form.PreparationTime} onChange={handleInput} min={0} />
+            <input type="number" name="PreparationTime" value={form.preparationTime} onChange={handleInput} min={0} />
           </label>
           <label>
             Cuiss. (min)
-            <input type="number" name="CookingTime" value={form.CookingTime} onChange={handleInput} min={0} />
+            <input type="number" name="CookingTime" value={form.cookingTime} onChange={handleInput} min={0} />
           </label>
           <label>
             Portions

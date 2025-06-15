@@ -17,7 +17,7 @@ const Ingredient: React.FC = () => {
   return (
     <div>
       <h1>Ingrédient : {slug}</h1>
-      <ul>{recipes.map(r => <li key={r.id}>{r.title}</li>)}</ul>
+      <ul>{recipes.map(r => <li key={r.recipeId}>{r.title}</li>)}</ul>
     </div>
   );
 };
