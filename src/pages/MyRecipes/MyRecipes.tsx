@@ -5,12 +5,10 @@ import api from '../../api/api';
 import styles from './MyRecipes.module.scss';
 
 interface RecipeSummary {
-  id: number;
+  recipeId: number;
   title: string;
-  image: string;
+  imageUrl: string;
 }
-
-
 
 const MyRecipes: FC = () => {
   const [recipes, setRecipes] = useState<RecipeSummary[]>([]);
@@ -19,12 +17,14 @@ const MyRecipes: FC = () => {
 
   useEffect(() => {
     api
-      .get<RecipeSummary[]>('/users/me/recipes')
-      .then((res) => {
-        setRecipes(res.data);
+      .get<RecipeSummary[]>('/recipes/me')
+      .then(res => {
+        // si le back a enveloppé la liste dans { $id, $values: […] }
+        const raw = (res.data as any).$values ?? res.data;
+        setRecipes(raw);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(err => {
         setError(err.message);
         setLoading(false);
       });
@@ -43,9 +43,13 @@ const MyRecipes: FC = () => {
         </p>
       ) : (
         <div className={styles.grid}>
-          {recipes.map((r) => (
-            <Link key={r.id} to={`/recipes/${r.id}`} className={styles.card}>
-              <img src={r.image} alt={r.title} className={styles.cover} />
+          {recipes.map(r => (
+            <Link key={r.recipeId} to={`/recipes/${r.recipeId}`} className={styles.card}>
+              <img
+                src={`http://localhost:5148${r.imageUrl}`}
+                alt={r.title}
+                className={styles.cover}
+              />
               <h3>{r.title}</h3>
             </Link>
           ))}
