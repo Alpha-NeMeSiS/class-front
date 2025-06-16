@@ -125,18 +125,18 @@ const SubmitRecipe: FC = () => {
       data.append('cookingTime', form.cookTime.toString());
       data.append('servings', form.servings.toString());
       if (form.image) {
-        data.append('Image', form.image, form.image.name);
+        data.append('image', form.image, form.image.name);
       }
 
       // on envoie deux tableaux de même longueur
       form.ingredients.forEach(({ name, unit }) => {
-        data.append('Ingredients', name);
-        data.append('IngredientUnits', unit);
+        data.append('ingredients', name);
+        data.append('ingredientUnits', unit);
       });
-      form.instructions.forEach(s => data.append('Instructions', s));
+      form.instructions.forEach(s => data.append('instructions', s));
 
       if (user?.id) {
-        data.append('UserId', user.id);
+        data.append('userId', user.id);
       }
 
       // for (let pair of data.entries()) {
