@@ -24,6 +24,7 @@ function App() {
 
   return (
     <>
+    <header>
       <nav className="main-nav">
         <div className="nav-header">
           <div className="logo">KookBook</div>
@@ -57,7 +58,7 @@ function App() {
           )}
         </ul>
       </nav>
-
+    </header>
       <Routes>
         {/* Routes publiques */}
         <Route path="/" element={<Home />} />
@@ -65,7 +66,7 @@ function App() {
         <Route path="/recipes/:id" element={<RecipeDetail />} />
         <Route path="/categories/:slug" element={<Category />} />
         <Route path="/ingredients/:slug" element={<Ingredient />} />
-
+        
         {/* Auth routes */}
         <Route
           path="/login"
